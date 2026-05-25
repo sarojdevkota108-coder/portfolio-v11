@@ -14,7 +14,7 @@ export const METRICS = [
   { num: '3',  suffix: '',  label: 'Professions' },
   { num: '10', suffix: '+', label: 'Technologies' },
   { num: '5',  suffix: '+', label: 'Projects' },
-  { num: '40', suffix: '+', label: 'People Trained' },
+  { num: '45', suffix: '+', label: 'People Trained' },
 ]
 
 // ─── SOCIAL LINKS ────────────────────────────────────────────────────────────
