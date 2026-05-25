@@ -1,0 +1,5 @@
+{
+  "/api/cms/auth/route": "app/api/cms/auth/route.js",
+  "/api/cms/route": "app/api/cms/route.js",
+  "/admin/page": "app/admin/page.js"
+}

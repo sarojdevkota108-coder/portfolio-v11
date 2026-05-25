@@ -32,8 +32,21 @@ export async function GET(req: NextRequest) {
   }
 }
 
+// ── Auth helper ───────────────────────────────────────────────────────────────
+function isAuthorized(req: NextRequest): boolean {
+  const auth = req.headers.get('x-cms-token') || ''
+  const validUser = process.env.ADMIN_USERNAME || ''
+  const validPass = process.env.ADMIN_PASSWORD || ''
+  if (!validUser || !validPass) return false
+  const expected = Buffer.from(`${validUser}:${validPass}`).toString('base64')
+  return auth === expected
+}
+
 // POST /api/cms  body: { section, action, payload, id? }
 export async function POST(req: NextRequest) {
+  if (!isAuthorized(req)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
   try {
     const contentType = req.headers.get('content-type') || ''
 

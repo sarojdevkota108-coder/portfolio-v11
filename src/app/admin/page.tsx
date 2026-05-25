@@ -89,9 +89,10 @@ async function apiFetch(section: string) {
 }
 
 async function apiMutate(section: string, action: string, payload?: unknown, id?: string) {
+  const token = sessionStorage.getItem('cms_token') || ''
   const res = await fetch('/api/cms', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'x-cms-token': token },
     body: JSON.stringify({ section, action, payload, id }),
   })
   return res.json()
@@ -351,7 +352,7 @@ function CertificationsSection({ toast }: { toast: (m: string, t?: 'ok' | 'err')
       const fd = new FormData()
       fd.append('file', file)
       fd.append('certId', certId)
-      const res  = await fetch('/api/cms', { method: 'POST', body: fd })
+      const res  = await fetch('/api/cms', { method: 'POST', body: fd, headers: { 'x-cms-token': sessionStorage.getItem('cms_token') || '' } })
       const data = await res.json()
       if (data.success) {
         setItems(prev => prev.map(i => i.id === certId ? { ...i, image: data.path } : i))
@@ -620,7 +621,7 @@ function VolunteerSection({ toast }: { toast: (m: string, t?: 'ok' | 'err') => v
     fd.append('itemId', itemId)
     fd.append('section', 'volunteer')
     try {
-      const res = await fetch('/api/cms', { method: 'POST', body: fd })
+      const res = await fetch('/api/cms', { method: 'POST', body: fd, headers: { 'x-cms-token': sessionStorage.getItem('cms_token') || '' } })
       const json = await res.json()
       if (json.success) {
         setItems(prev => prev.map(it => it.id === itemId ? { ...it, image: json.path } : it))
@@ -873,14 +874,122 @@ const NAV = [
   { id: 'skills',  label: 'Skills',          icon: '⚡' },
 ]
 
+// ── Login Gate ────────────────────────────────────────────────────────────────
+function LoginGate({ onAuth }: { onAuth: () => void }) {
+  const [id, setId]       = useState('')
+  const [pw, setPw]       = useState('')
+  const [err, setErr]     = useState('')
+  const [loading, setLoading] = useState(false)
+
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault()
+    setErr('')
+    setLoading(true)
+    try {
+      const res  = await fetch('/api/cms/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: id, password: pw }),
+      })
+      const json = await res.json()
+      if (json.ok) {
+        sessionStorage.setItem('cms_token', json.token)
+        onAuth()
+      } else {
+        setErr('Invalid username or password.')
+      }
+    } catch {
+      setErr('Network error. Please try again.')
+    }
+    setLoading(false)
+  }
+
+  return (
+    <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #060b14 0%, #0a1020 50%, #060b14 100%)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      fontFamily: 'system-ui, sans-serif',
+    }}>
+      <div style={{
+        width: 360, background: 'rgba(255,255,255,0.03)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        borderRadius: 16, padding: '40px 36px',
+      }}>
+        <div style={{ textAlign: 'center', marginBottom: 32 }}>
+          <div style={{ fontSize: 10, letterSpacing: '.14em', color: '#4f7fff', fontFamily: 'monospace', marginBottom: 6 }}>
+            SAROJ PORTFOLIO
+          </div>
+          <div style={{ fontSize: 22, fontWeight: 700, color: '#e0e8ff' }}>CMS Admin</div>
+          <div style={{ fontSize: 12, color: '#8899bb', marginTop: 4 }}>Sign in to continue</div>
+        </div>
+        <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div>
+            <label style={{ fontSize: 11, color: '#8899bb', letterSpacing: '.08em', display: 'block', marginBottom: 6 }}>
+              USERNAME
+            </label>
+            <input
+              type="text" value={id} onChange={e => setId(e.target.value)}
+              autoComplete="username" required
+              style={{
+                width: '100%', boxSizing: 'border-box',
+                background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: 8, padding: '10px 14px', color: '#e0e8ff', fontSize: 14, outline: 'none',
+              }}
+            />
+          </div>
+          <div>
+            <label style={{ fontSize: 11, color: '#8899bb', letterSpacing: '.08em', display: 'block', marginBottom: 6 }}>
+              PASSWORD
+            </label>
+            <input
+              type="password" value={pw} onChange={e => setPw(e.target.value)}
+              autoComplete="current-password" required
+              style={{
+                width: '100%', boxSizing: 'border-box',
+                background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: 8, padding: '10px 14px', color: '#e0e8ff', fontSize: 14, outline: 'none',
+              }}
+            />
+          </div>
+          {err && (
+            <div style={{ fontSize: 12, color: '#ff6b8a', background: 'rgba(255,107,138,0.08)', borderRadius: 6, padding: '8px 12px' }}>
+              {err}
+            </div>
+          )}
+          <button
+            type="submit" disabled={loading}
+            style={{
+              marginTop: 4, padding: '12px', borderRadius: 8, border: 'none',
+              background: loading ? 'rgba(79,127,255,0.4)' : '#4f7fff',
+              color: '#fff', fontWeight: 600, fontSize: 14, cursor: loading ? 'not-allowed' : 'pointer',
+              transition: 'background .15s',
+            }}
+          >
+            {loading ? 'Signing in…' : 'Sign In'}
+          </button>
+        </form>
+      </div>
+    </div>
+  )
+}
+
 export default function AdminPage() {
+  const [authed, setAuthed] = useState(false)
   const [tab, setTab] = useState('achievements')
   const [toast, setToast] = useState<{ msg: string; type: 'ok' | 'err' } | null>(null)
+
+  // Check session on mount
+  useEffect(() => {
+    if (sessionStorage.getItem('cms_token')) setAuthed(true)
+  }, [])
 
   const showToast = useCallback((msg: string, type: 'ok' | 'err' = 'ok') => {
     setToast({ msg, type })
     setTimeout(() => setToast(null), 3000)
   }, [])
+
+  if (!authed) return <LoginGate onAuth={() => setAuthed(true)} />
 
   return (
     <div style={{
