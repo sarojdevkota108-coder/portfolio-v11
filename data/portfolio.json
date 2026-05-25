@@ -1,0 +1,401 @@
+{
+  "hero": {
+    "name": "Saroj Devkota",
+    "tagline": "Developer · Interior Designer · Network Engineer",
+    "bio": "Building at the intersection of code, design, and infrastructure."
+  },
+  "metrics": [
+    {
+      "num": "3",
+      "suffix": "",
+      "label": "Professions"
+    },
+    {
+      "num": "10",
+      "suffix": "",
+      "label": "Technologies"
+    },
+    {
+      "num": "5",
+      "suffix": "",
+      "label": "Projects"
+    },
+    {
+      "num": "9",
+      "suffix": "",
+      "label": "certification"
+    }
+  ],
+  "socials": {
+    "github": "https://github.com/Saroj058",
+    "linkedin": "https://www.linkedin.com/in/saroj-devkota/",
+    "instagram": "https://www.instagram.com/__saroj_058__/",
+    "email": "mailto:Saroj.devkota666@gmail.com"
+  },
+  "about": {
+    "heading": "About Me",
+    "body": "I'm Saroj Devkota — a third-year Computing student with a rare triple focus: full-stack web development, enterprise networking, and interior design. I thrive at the crossroads of logic and aesthetics, building systems that are both robust and beautiful."
+  },
+  "achievements": [
+    {
+      "id": "achievements-1779536602703",
+      "color": "blue",
+      "category": "Network",
+      "icon": "network",
+      "title": "Built Home Networking Lab",
+      "org": "Self Learning",
+      "year": "2026",
+      "description": "Configured routers, switches, IP addressing, and basic network troubleshooting in a practical home lab environment.",
+      "tag": "Network Lab"
+    }
+  ],
+  "certifications": [
+    {
+      "id": "cert-2",
+      "name": "Networking Basics",
+      "issuer": "Cisco Networking Academy",
+      "year": "2026",
+      "status": "done",
+      "color": "blue",
+      "credentialUrl": "https://www.credly.com/badges/db664e74-14fd-43cd-a55b-d4091e5b6806/linked_in_profile",
+      "description": "Successfully completed the Networking Basics course through Cisco Networking Academy, gaining foundational knowledge in networking concepts, IP addressing, network protocols, routing, switching, and basic network troubleshooting.",
+      "image": "/certificates/cert-2.pdf",
+      "credentialId": "0c33e30f-912f-4c7d-a146-b6712a6f5507"
+    },
+    {
+      "id": "cert-3",
+      "name": "Cisco Packet Tracer",
+      "issuer": "Cisco Networking Academy",
+      "year": "2026",
+      "status": "done",
+      "color": "blue",
+      "description": "Hands-on network simulation using Cisco Packet Tracer.",
+      "image": "/certificates/cert-3.pdf",
+      "credentialId": "09e5f2e5-4759-4d28-98dd-1c60816b00bb"
+    },
+    {
+      "id": "cert-4",
+      "name": "Linux Unhatched",
+      "issuer": "NDG / Cisco",
+      "year": "2026",
+      "status": "done",
+      "color": "green",
+      "description": "Successfully completed the NDG Linux Unhatched course offered through Cisco Networking Academy, gaining foundational knowledge of Linux operating systems, command-line navigation, file management, system operations, and essential skills for networking and IT infrastructure roles.",
+      "image": "/certificates/cert-4.pdf",
+      "credentialId": "0b9f9eb2-77b9-40c5-8701-964a6235a82c",
+      "credentialUrl": "https://www.credly.com/badges/dcf53453-3619-464f-af27-2a60ec82a01d/linked_in_profile"
+    },
+    {
+      "id": "cert-6",
+      "name": "Microsoft Excel",
+      "issuer": "Simplilearn",
+      "year": "2026",
+      "status": "done",
+      "color": "green",
+      "description": "Successfully completed the Introduction to MS Excel course powered by Microsoft through Simplilearn SkillUp, gaining foundational knowledge in spreadsheet management, formulas and functions, data organization, and analytical skills for professional and technical applications.",
+      "image": "/certificates/cert-6.pdf",
+      "credentialUrl": "https://simpli-web.app.link/e/qdjoBhV5b3b",
+      "credentialId": "10234496"
+    },
+    {
+      "id": "cert-7",
+      "name": "Solutions Architect (SAA-C03)",
+      "issuer": "Amazon Web Services",
+      "year": "2026",
+      "status": "prog",
+      "color": "amber"
+    },
+    {
+      "id": "cert-8",
+      "name": "CCNA",
+      "issuer": "Cisco",
+      "year": "2026",
+      "status": "prog",
+      "color": "blue"
+    },
+    {
+      "id": "certifications-1779624042835",
+      "color": "blue",
+      "status": "done",
+      "name": "Introduction to Software Testing",
+      "issuer": "Simplilearn",
+      "year": "2026",
+      "credentialId": "9685914",
+      "description": "Learned about software testing",
+      "image": "/certificates/certifications-1779624042835.pdf"
+    }
+  ],
+  "projects": [
+    {
+      "id": "donation-system",
+      "badge": "Final Year Project",
+      "title": "Donation & Volunteer Management System",
+      "description": "Full-stack Django application streamlining donations, volunteer coordination, and organizational management with role-based access control and real-time dashboards.",
+      "stack": [
+        "Django",
+        "Python",
+        "JavaScript",
+        "HTML/CSS",
+        "SQL",
+        "RBAC"
+      ],
+      "color": "blue",
+      "featured": true,
+      "live": "https://donvolproject.onrender.com",
+      "posterImage": "/images/donation-poster.png",
+      "metrics": [
+        {
+          "label": "Users Supported",
+          "value": "200+"
+        },
+        {
+          "label": "Modules",
+          "value": "6"
+        },
+        {
+          "label": "Response Time",
+          "value": "<200ms"
+        }
+      ],
+      "features": [
+        "Role-Based Access Control (Admin / Volunteer / Donor)",
+        "Real-Time Donation Tracking & Analytics Dashboard",
+        "Volunteer Registration & Task Assignment",
+        "Secure Authentication with Django Auth",
+        "Database-Driven Report Generation",
+        "Fully Responsive UI"
+      ]
+    },
+    {
+      "id": "iot-obstacle-robot",
+      "badge": "IoT · Robotics",
+      "title": "IoT Obstacle-Avoiding Robot",
+      "description": "Built an IoT-enabled mobile robot with ultrasonic sensing, obstacle avoidance, and remote monitoring. Watch the live demo below showing autonomous navigation through a testing course.",
+      "stack": [
+        "Arduino",
+        "IoT",
+        "Ultrasonic Sensors",
+        "C/C++",
+        "MQTT"
+      ],
+      "color": "cyan",
+      "featured": false,
+      "youtubeId": "Vpn82UM27Qo",
+      "metrics": [
+        {
+          "label": "Obstacle Avoidance",
+          "value": "Autonomous"
+        },
+        {
+          "label": "Sensors",
+          "value": "Ultrasonic + IR"
+        },
+        {
+          "label": "Demo",
+          "value": "YouTube"
+        }
+      ],
+      "features": [
+        "Autonomous obstacle detection and avoidance",
+        "IoT telemetry for remote status monitoring",
+        "Real-time sensor fusion with ultrasonic and infrared arrays",
+        "Compact Arduino-based mobile robotics platform",
+        "YouTube demo of robot navigating a test course"
+      ]
+    },
+    {
+      "id": "ai-models",
+      "badge": "AI · Machine Learning",
+      "title": "AI Image & Text Models",
+      "description": "Developed two machine learning models from scratch: a CNN-based car logo image detection system that classifies brand logos from images, and an RNN-based text conversion model for sequence-to-sequence text processing.",
+      "stack": [
+        "Python",
+        "TensorFlow",
+        "CNN",
+        "RNN",
+        "Keras",
+        "NumPy",
+        "OpenCV"
+      ],
+      "color": "violet",
+      "featured": false,
+      "metrics": [
+        {
+          "label": "CNN Model",
+          "value": "Car Logos"
+        },
+        {
+          "label": "RNN Model",
+          "value": "Text Convert"
+        },
+        {
+          "label": "Framework",
+          "value": "TensorFlow"
+        }
+      ],
+      "features": [
+        "CNN model for car logo image detection & brand classification",
+        "RNN model for text sequence conversion and processing",
+        "Custom training pipelines with data augmentation",
+        "Model evaluation with accuracy & loss metrics",
+        "Built using TensorFlow / Keras with Python"
+      ]
+    }
+  ],
+  "volunteer": [
+    {
+      "id": "vol-1",
+      "year": "2023",
+      "title": "Cyber Security Awareness Trainer",
+      "org": "Technology Education Initiative · Kathmandu",
+      "description": "Delivered hands-on cybersecurity training covering digital hygiene, phishing prevention, and safe online practices to local community members.",
+      "tag": "40+ individuals trained",
+      "color": "cyan",
+      "icon": "shield",
+      "image": "/volunteer/vol-1.pdf"
+    },
+    {
+      "id": "vol-2",
+      "year": "2023",
+      "title": "Breast Cancer Awareness Volunteer",
+      "org": "Healthcare Community Initiative",
+      "description": "Participated in awareness campaigns focused on early detection and community education across local neighbourhoods.",
+      "tag": "Healthcare",
+      "color": "rose",
+      "icon": "heart",
+      "image": "/volunteer/vol-2.pdf"
+    },
+    {
+      "id": "vol-3",
+      "year": "2022–Present",
+      "title": "Educational Tutoring Volunteer",
+      "org": "Academic Support Programme",
+      "description": "Free tutoring in mathematics, computing, and science to students from underserved backgrounds.",
+      "tag": "Education · Mentorship",
+      "color": "green",
+      "icon": "school",
+      "image": "/volunteer/vol-3.pdf"
+    },
+    {
+      "id": "vol-4",
+      "year": "Ongoing",
+      "title": "Public Speaking & Leadership Development",
+      "org": "Community Leadership Programmes",
+      "description": "Active participation in workshops and leadership programmes developing communication and organisational skills.",
+      "tag": "Leadership",
+      "color": "amber",
+      "icon": "microphone",
+      "image": "/volunteer/vol-4.pdf"
+    }
+  ],
+  "skills": [
+    {
+      "category": "Frontend",
+      "color": "cyan",
+      "items": [
+        {
+          "name": "React / Next.js",
+          "tag": "Proficient"
+        },
+        {
+          "name": "JavaScript / TypeScript",
+          "tag": "Proficient"
+        },
+        {
+          "name": "HTML5 / CSS3",
+          "tag": "Advanced"
+        },
+        {
+          "name": "Tailwind CSS",
+          "tag": "Proficient"
+        }
+      ]
+    },
+    {
+      "category": "Backend",
+      "color": "blue",
+      "items": [
+        {
+          "name": "Python / Django",
+          "tag": "Advanced"
+        },
+        {
+          "name": "REST API Design",
+          "tag": "Proficient"
+        },
+        {
+          "name": "SQL / PostgreSQL",
+          "tag": "Competent"
+        },
+        {
+          "name": "Authentication & Auth",
+          "tag": "Proficient"
+        }
+      ]
+    },
+    {
+      "category": "Networking",
+      "color": "amber",
+      "items": [
+        {
+          "name": "TCP/IP & Subnetting",
+          "tag": "Proficient"
+        },
+        {
+          "name": "Cisco / Packet Tracer",
+          "tag": "Proficient"
+        },
+        {
+          "name": "VLANs / Routing",
+          "tag": "Competent"
+        },
+        {
+          "name": "Firewalls / Security",
+          "tag": "Competent"
+        }
+      ]
+    },
+    {
+      "category": "Interior Design",
+      "color": "green",
+      "items": [
+        {
+          "name": "Space Planning",
+          "tag": "Proficient"
+        },
+        {
+          "name": "3D Visualization",
+          "tag": "Proficient"
+        },
+        {
+          "name": "AutoCAD",
+          "tag": "Competent"
+        },
+        {
+          "name": "Lighting Design",
+          "tag": "Competent"
+        }
+      ]
+    }
+  ],
+  "marquee": [
+    "Python",
+    "Django",
+    "React",
+    "Next.js",
+    "TypeScript",
+    "JavaScript",
+    "TCP/IP",
+    "Cisco",
+    "AWS",
+    "VLANs",
+    "Docker",
+    "PostgreSQL",
+    "AutoCAD",
+    "3D Viz",
+    "Git",
+    "Linux",
+    "REST API",
+    "Node.js"
+  ]
+}
