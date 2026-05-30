@@ -1,17 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { promises as fs } from 'fs'
-import path from 'path'
 
-const DB_PATH = path.join(process.cwd(), 'data', 'portfolio.json')
-
-async function readDB() {
-  const raw = await fs.readFile(DB_PATH, 'utf-8')
-  return JSON.parse(raw)
-}
-
-async function writeDB(data: unknown) {
-  await fs.writeFile(DB_PATH, JSON.stringify(data, null, 2), 'utf-8')
-}
+const SUPABASE_URL      = process.env.SUPABASE_URL!
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY!
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,32 +15,42 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Build the new message object
     const newMessage = {
-      id: `msg-${Date.now()}`,
-      name:      name.trim(),
-      email:     email.trim(),
-      subject:   subject?.trim() || '',
-      message:   message.trim(),
-      receivedAt: new Date().toISOString(),
-      read:    false,
-      starred: false,
+      id:          `msg-${Date.now()}`,
+      name:        name.trim(),
+      email:       email.trim(),
+      subject:     subject?.trim() || '',
+      message:     message.trim(),
+      received_at: new Date().toISOString(),
+      read:        false,
+      starred:     false,
     }
 
-    // Append to portfolio.json under the "messages" key
-    const db = await readDB()
-    if (!Array.isArray(db.messages)) {
-      db.messages = []
-    }
-    db.messages.unshift(newMessage) // newest first
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/messages`, {
+      method: 'POST',
+      headers: {
+        'Content-Type':  'application/json',
+        'apikey':        SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Prefer':        'return=minimal',
+      },
+      body: JSON.stringify(newMessage),
+    })
 
-    await writeDB(db)
+    if (!res.ok) {
+      const err = await res.text()
+      console.error('Supabase insert error:', err)
+      return NextResponse.json(
+        { error: 'Unable to save your message. Please try again.' },
+        { status: 500 }
+      )
+    }
 
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Contact API error:', error)
     return NextResponse.json(
-      { error: 'Unable to save your message. Please try again.' },
+      { error: 'Something went wrong. Please try again.' },
       { status: 500 }
     )
   }
