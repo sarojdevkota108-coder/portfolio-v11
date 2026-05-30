@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { promises as fs } from 'fs'
 import path from 'path'
 
-const DB_PATH = path.join(process.cwd(), 'data', 'portfolio.json')
+const DB_PATH    = path.join(process.cwd(), 'data', 'portfolio.json')
 const UPLOADS_DIR = path.join(process.cwd(), 'public', 'certificates')
 
 async function ensureUploadsDir() {
@@ -24,6 +24,10 @@ export async function GET(req: NextRequest) {
     const section = req.nextUrl.searchParams.get('section')
     const db = await readDB()
     if (section) {
+      // Always return an array for messages even if key doesn't exist yet
+      if (section === 'messages') {
+        return NextResponse.json({ data: db.messages ?? [] })
+      }
       return NextResponse.json({ data: db[section] ?? null })
     }
     return NextResponse.json({ data: db })
@@ -34,7 +38,7 @@ export async function GET(req: NextRequest) {
 
 // ── Auth helper ───────────────────────────────────────────────────────────────
 function isAuthorized(req: NextRequest): boolean {
-  const auth = req.headers.get('x-cms-token') || ''
+  const auth      = req.headers.get('x-cms-token') || ''
   const validUser = process.env.ADMIN_USERNAME || ''
   const validPass = process.env.ADMIN_PASSWORD || ''
   if (!validUser || !validPass) return false
@@ -50,7 +54,7 @@ export async function POST(req: NextRequest) {
   try {
     const contentType = req.headers.get('content-type') || ''
 
-    // ── Handle certificate image upload ──────────────────────────────────────
+    // ── Handle certificate / volunteer image upload ───────────────────────────
     if (contentType.includes('multipart/form-data')) {
       await ensureUploadsDir()
       const formData = await req.formData()
@@ -64,25 +68,23 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Missing file or id' }, { status: 400 })
       }
 
-      const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg'
+      const ext     = file.name.split('.').pop()?.toLowerCase() || 'jpg'
       const allowed = ['jpg', 'jpeg', 'png', 'pdf', 'webp']
       if (!allowed.includes(ext)) {
         return NextResponse.json({ error: 'File type not allowed' }, { status: 400 })
       }
 
-      // Volunteer files go to /public/volunteer/, certs to /public/certificates/
-      const subDir = section === 'volunteer' ? 'volunteer' : 'certificates'
-      const dir = path.join(process.cwd(), 'public', subDir)
+      const subDir   = section === 'volunteer' ? 'volunteer' : 'certificates'
+      const dir      = path.join(process.cwd(), 'public', subDir)
       try { await fs.mkdir(dir, { recursive: true }) } catch {}
 
-      const filename = `${id}.${ext}`
-      const filepath = path.join(dir, filename)
-      const buffer = Buffer.from(await file.arrayBuffer())
+      const filename  = `${id}.${ext}`
+      const filepath  = path.join(dir, filename)
+      const buffer    = Buffer.from(await file.arrayBuffer())
       await fs.writeFile(filepath, buffer)
 
-      // Update the DB record with the image path
       const publicPath = `/${subDir}/${filename}`
-      const db = await readDB()
+      const db         = await readDB()
       if (Array.isArray(db[section])) {
         db[section] = db[section].map((item: { id: string }) =>
           item.id === id ? { ...item, image: publicPath } : item
@@ -102,6 +104,41 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing section or action' }, { status: 400 })
     }
 
+    // ── Messages-specific actions ─────────────────────────────────────────────
+    if (section === 'messages') {
+      if (!Array.isArray(db.messages)) db.messages = []
+
+      if (action === 'markRead') {
+        db.messages = db.messages.map((m: { id: string; read: boolean }) =>
+          m.id === id ? { ...m, read: true } : m
+        )
+      }
+
+      if (action === 'markUnread') {
+        db.messages = db.messages.map((m: { id: string; read: boolean }) =>
+          m.id === id ? { ...m, read: false } : m
+        )
+      }
+
+      if (action === 'toggleStar') {
+        db.messages = db.messages.map((m: { id: string; starred: boolean }) =>
+          m.id === id ? { ...m, starred: !m.starred } : m
+        )
+      }
+
+      if (action === 'delete') {
+        db.messages = db.messages.filter((m: { id: string }) => m.id !== id)
+      }
+
+      if (action === 'markAllRead') {
+        db.messages = db.messages.map((m: { read: boolean }) => ({ ...m, read: true }))
+      }
+
+      await writeDB(db)
+      return NextResponse.json({ success: true, data: db.messages })
+    }
+
+    // ── Generic section mutations ─────────────────────────────────────────────
     if (action === 'add') {
       if (!Array.isArray(db[section])) {
         return NextResponse.json({ error: 'Section is not an array' }, { status: 400 })
@@ -124,13 +161,10 @@ export async function POST(req: NextRequest) {
       if (!Array.isArray(db[section])) {
         return NextResponse.json({ error: 'Section is not an array' }, { status: 400 })
       }
-      // Also remove the certificate image file if it exists
       if (section === 'certifications') {
         const item = db[section].find((i: { id: string; image?: string }) => i.id === id)
         if (item?.image) {
-          try {
-            await fs.unlink(path.join(process.cwd(), 'public', item.image))
-          } catch {}
+          try { await fs.unlink(path.join(process.cwd(), 'public', item.image)) } catch {}
         }
       }
       db[section] = db[section].filter((item: { id: string }) => item.id !== id)
